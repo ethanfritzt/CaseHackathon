@@ -1,0 +1,33 @@
+.\usr_doc.txt                                                               Page 256
+This gives you a personal copy of Vim.  You need to put $HOME/bin in your
+path to execute the editor.  Also see |install−home|.
+Q: The Colors Are Not Right on My Screen. (Unix)
+Check your terminal settings by using the following command in a shell: >        echo $TERMIf the terminal type listed is not correct, fix it.  For more hints, see
+|06.2|.  Another solution is to always use the GUI version of Vim, calledgvim.  This avoids the need for a correct terminal setup.
+Q: My Backspace And Delete Keys Don't Work Right
+The definition of what key sends what code is very unclear for backspace <BS>
+and Delete <Del> keys.  First of all, check your $TERM setting.  If there isnothing wrong with it, try this: >
+        :set t_kb=^V<BS>
+        :set t_kD=^V<Del>
+In the first line you need to press CTRL−V and then hit the backspace key.
+In the second line you need to press CTRL−V and then hit the Delete key.You can put these lines in your vimrc file, see |05.1|.  A disadvantage isthat it won't work when you use another terminal some day.  Look here foralternate solutions: |:fixdel|.
+Q: I Am Using RedHat Linux.  Can I Use the Vim That Comes with the System?
+By default RedHat installs a minimal version of Vim.  Check your RPM packages
+for something named "Vim−enhanced−version.rpm" and install that.
+Q: How Do I Turn Syntax Coloring On?  How do I make plugins work?
+Use the example vimrc script.  You can find an explanation on how to use it
+here: |not−compatible|.
+See chapter 6 for information about syntax highlighting: |usr_06.txt|.
+Q: What Is a Good vimrc File to Use?
+See the www.vim.org Web site for several good examples.
+Q: Where Do I Find a Good Vim Plugin?
+See the Vim−online site: http://vim.sf.net.  Many users have uploaded useful
+Vim scripts and plugins there.
+Q: Where Do I Find More Tips?
+See the Vim−online site: http://vim.sf.net.  There is an archive with hints
+from Vim users.  You might also want to search in the |maillist−archive|.
+==============================================================================
+*90.5*  Uninstalling Vim
+In the unlikely event you want to uninstall Vim completely, this is how you do
+it.
+UNIX

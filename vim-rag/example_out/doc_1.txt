@@ -1,0 +1,3 @@
+*08.6*  Commands for all windows
+When you have several windows open and you want to quit Vim, you can close
+each window separately.  A quicker way is using this command: >
