@@ -16,7 +16,7 @@ if (!fs.existsSync(imageOutputDirectory)) {
   fs.mkdirSync(imageOutputDirectory, { recursive: true });
 }
 
-async function saveImage({ prompt, index }: { prompt: string, index: number }) {
+async function generateImage({ prompt, index }: { prompt: string, index: number }) {
   console.log(`Generating image for scene ${index}`);
 
   try {
@@ -99,7 +99,7 @@ export async function imageGenerator(state: GraphStateType): Promise<Partial<Gra
       throw new Error(`Scene ${index} does not have a graphic description`);
     }
     // generate image for the scene
-    const { imagePath } = await saveImage({ prompt: scene.graphicDescription, index });
+    const { imagePath } = await generateImage({ prompt: scene.graphicDescription, index });
 
     return {
       ...scene,
@@ -111,3 +111,6 @@ export async function imageGenerator(state: GraphStateType): Promise<Partial<Gra
     scenes: updatedScenes,
   };
 }
+
+// async function test(prompt: string) { await generateImage({ prompt, index: 0 }); }
+// test("a white siamese cat"); // Outputs ./generated_images/scene_0.png

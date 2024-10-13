@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# ignore all but the top-level tsconfig.json file
+**/tsconfig.json
+!/tsconfig.json
+

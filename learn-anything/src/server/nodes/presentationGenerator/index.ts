@@ -33,7 +33,10 @@ export async function createPresentation(state: GraphStateType): Promise<Partial
     }
 }
 
-// async function test() {
-// await createPresentation({scenes: [{content: "this is a scene"}, {content: "this is another scene"}, {content: "this is a third scene"}]})
+// async function test(scenes: string[]) {
+//   const state: GraphStateType = {
+//     scenes: scenes.map(scene => ({content: scene})),
+//   }
+//   await createPresentation(state)
 // }
-// test()
+// test(["this is a scene", "this is another scene", "this is a third scene"])

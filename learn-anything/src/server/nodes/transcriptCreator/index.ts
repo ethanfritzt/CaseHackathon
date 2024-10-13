@@ -44,9 +44,9 @@ function splitContent(content: string): SceneDetails[] {
 }
 
 
-// async function test() {
-//   const state = {generatedContent: "Content about 'The Water Cycle Explained': Discuss the processes of evaporation, condensation, precipitation, and collection in the water cycle, and explain how they contribute to Earth's ecosystem."}
+// async function test(prompt: string) {
+//   const state = {generatedContent: prompt}
 //   const response = await createTranscript(state);
 //   console.log(response);
 // }
-// test()
+// test("Content about 'The Water Cycle Explained': Discuss the processes of evaporation, condensation, precipitation, and collection in the water cycle, and explain how they contribute to Earth's ecosystem.")
