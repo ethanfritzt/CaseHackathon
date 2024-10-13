@@ -1,4 +1,4 @@
-import { GraphStateType } from "src/state/index";
+import { GraphStateType } from "src/server/state/index";
 export async function createManimVisual(state: GraphStateType): Promise<Partial<GraphStateType>> {
   const { scenes } = state;
   // for each scene, generate visual content with manim

@@ -1,4 +1,4 @@
-import { GraphStateType } from "src/state/index";
+import { GraphStateType } from "src/server/state"
 
 // define the generate audio function
 async function generateAudio(scene: string, index:number): Promise<{audioPath: string, audioLength: number}> {

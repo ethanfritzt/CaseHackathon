@@ -57,16 +57,7 @@ workflow.addEdge(START, "toxicityCheck")
 const app = workflow.compile()
 
 // create image
-  const representation = app.getGraph();
-  // const mermaid = representation.drawMermaid();
-  // console.log(mermaid);
-  const image = await representation.drawMermaidPng();
-  const arrayBuffer = await image.arrayBuffer();
-  fs.writeFileSync("graph.png", Buffer.from(arrayBuffer));
-
-
-
-// add recursion limit of 10
+const representation = app.getGraph();
 
 const inputs = {
   messages: [
@@ -77,30 +68,35 @@ const inputs = {
 };
 
 let finalState;
-for await (const output of await app.stream(inputs, {recursionLimit: 10})) {
-  // if (!output.__end__) {
-  //   console.log(output);
-  //   console.log("---");
-  // }
-  for (const [key, value] of Object.entries(output)) {
-    // Ensure that output[key].messages exists and is an array
-    if (output[key].messages && Array.isArray(output[key].messages) && output[key].messages.length > 0) {
-      const lastMsg = output[key].messages[output[key].messages.length - 1];
-      console.log(`Output from node: '${key}'`);
-      console.dir({
-        type: lastMsg._getType(),
-        content: lastMsg.content,
-        tool_calls: lastMsg.tool_calls,
-      }, { depth: null });
-      console.log("---\n");
-      finalState = value;
-    } else {
-      console.warn(`Output from node '${key}' does not contain valid messages. \n\n Here is the output: \n\n ${JSON.stringify(output[key], null, 2)}`);
+
+(async () => {
+  const image = await representation.drawMermaidPng();
+  const arrayBuffer = await image.arrayBuffer();
+  fs.writeFileSync("graph.png", Buffer.from(arrayBuffer));
+
+  for await (const output of await app.stream(inputs, { recursionLimit: 10 })) {
+    // if (!output.__end__) {
+    //   console.log(output);
+    //   console.log("---");
+    // }
+    for (const [key, value] of Object.entries(output)) {
+      // Ensure that output[key].messages exists and is an array
+      if (output[key].messages && Array.isArray(output[key].messages) && output[key].messages.length > 0) {
+        const lastMsg = output[key].messages[output[key].messages.length - 1];
+        console.log(`Output from node: '${key}'`);
+        console.dir({
+          type: lastMsg._getType(),
+          content: lastMsg.content,
+          tool_calls: lastMsg.tool_calls,
+        }, { depth: null });
+        console.log("---\n");
+        finalState = value;
+      } else {
+        console.warn(`Output from node '${key}' does not contain valid messages. \n\n Here is the output: \n\n ${JSON.stringify(output[key], null, 2)}`);
+      }
     }
   }
-}
-
-
+})();
 
 // console.log(JSON.stringify(finalState, null, 2));
 

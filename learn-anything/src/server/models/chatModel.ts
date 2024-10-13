@@ -1,4 +1,4 @@
-// src/models/chatModel.ts
+// src/server/models/chatModel.ts
 import { ChatOpenAI } from "@langchain/openai";
 import dotenv from "dotenv";
 dotenv.config();
