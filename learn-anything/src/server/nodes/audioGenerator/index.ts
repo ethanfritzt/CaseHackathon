@@ -17,12 +17,15 @@ export async function audioGenerator(state: GraphStateType): Promise<Partial<Gra
   // should probably modify the scenes to update with the audio file path, and length of the audio
   const updatedScenes = await Promise.all(scenes.map(async (scene, index) => {
     // generate audio for the scene
-    const {audioPath, audioLength} = await generateAudio(scene, index);
+  const {audioPath, audioLength} = await generateAudio(scene.content, index);
+  return {
+    ...scene,
+    path: audioPath,
+    length: audioLength,
+  };
 
 }));
   return {
-    // need to update the state so scenes can have metadata like audio path, length, number etc
-    // maybe a record would be better
-    // scenes: scenes,
+    scenes: updatedScenes,
   };
 }
