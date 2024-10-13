@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "run-agent": "ebx src/server/main.ts -r --ignore-types",
-    "test-agent": "ebx src/server/nodes/combineScenes/index.ts -r --ignore-types"
+    "test-agent": "ebx src/server/nodes/transcriptCreator/index.ts -r --ignore-types"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
