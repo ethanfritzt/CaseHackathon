@@ -6,8 +6,13 @@ load_dotenv()
 
 openai.api_key = os.getenv("api_key")
 
+requests = [] #contains every individual prompt to feed into Manim
+
+def getRequests():
+    return requests
+
 #the method prompting ChatGPT
-def write_script(level, prompt):
+def generate(level, prompt):
     completion = openai.chat.completions.create(
         model="gpt-4",
         messages=[
@@ -19,22 +24,19 @@ def write_script(level, prompt):
     )
     return completion.choices[0].message.content
 
-#prompt user for input
-level = input("What is your current education/professional level? ")
-prompt_message = input("What concept would you like explained? ")
-script = write_script(level,"Explain "+prompt_message) #THE VARIABLE CONTAINING THE SCRIPT
-requests = [] #contains every individual prompt to feed into Manim
+def write_script():
+    #prompt user for input
+    level = input("What is your current education/professional level? ")
+    prompt_message = input("What concept would you like explained? ")
+    script = generate(level,"Explain "+prompt_message) #THE VARIABLE CONTAINING THE SCRIPT
 
-i = 0
-while (i < len(script)):
-    section = []
-    while (i < len(script) and script[i] != "\n"):
-        section.append(script[i])
+    i = 0
+    while (i < len(script)):
+        section = []
+        while (i < len(script) and script[i] != "\n"):
+            section.append(script[i])
+            i += 1
+        section = ''.join(section)
+        requests.append(section)
+        print(section)
         i += 1
-    section = ''.join(section)
-    requests.append(section)
-    print(section)
-    i += 1
-
-
-#print(script) #print the string for testing purposes
