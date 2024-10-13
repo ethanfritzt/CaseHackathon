@@ -1,5 +1,10 @@
+import { request } from "http";
 import { GraphStateType } from "src/server/state"
+<<<<<<< HEAD
 import fs from 'fs';
+=======
+require('dotenv').config();
+>>>>>>> 10cf975 (Added the code to send the requestBody to the API and ensured that that any errors during the API call are caught.)
 
 // function to save audio to disk
 function saveAudio(audio: Buffer, path: string): Promise<void> {
@@ -26,12 +31,55 @@ async function generateAudio(scene: string, index:number, language: string = 'en
       sampleRateHertz: 16000 // Set the hertz rate
     },
   };
+<<<<<<< HEAD
   // save the audio to disk
 
   return {
     audioPath: "path/to/audio",
     audioLength: 30,
   };
+=======
+
+  const apiKey = process.env.OPENAI_API_KEY;
+  const apiUrl = "https://api.openai.com/v1/chat/completions"
+  try{
+    const response = await fetch(`${apiUrl}?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(requestBody),
+      mode: 'cors',
+    });
+
+    if (!response.ok){
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const audioContent = data.audioContent;
+
+    console.log(`Audio content generated for scene ${index}`);
+
+    return {
+      audioPath: "path/to/audio",
+      audioLength: 30,
+    };
+
+  }
+  catch (error: unknown) {
+    if (error instanceof Error) {
+        // If the error is an instance of the Error class, you can safely access its properties
+        console.error(`Failed to generate audio: ${error.message}`);
+    } else {
+        // Handle unexpected error types
+        console.error(`Failed to generate audio: ${String(error)}`);
+    }
+    throw error; // Propagate the error
+}
+>>>>>>> 10cf975 (Added the code to send the requestBody to the API and ensured that that any errors during the API call are caught.)
 }
 
 export async function audioGenerator(state: GraphStateType): Promise<Partial<GraphStateType>> {
