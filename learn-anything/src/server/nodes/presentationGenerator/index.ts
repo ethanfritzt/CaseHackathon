@@ -6,7 +6,7 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 const presentationPromptTemplate = ChatPromptTemplate.fromMessages<{scene: string}>([
     [
       "system",
-      "describe what the appropriate visual content aligning with the scene transcript that we can generate with manim",
+      "create a single graphical description of a image that will be good for this scene",
     ],
     ["user", "{scene}"],
   ]);
@@ -15,15 +15,15 @@ const presentationModel = presentationPromptTemplate.pipe(model);
 
 export async function createPresentation(state: GraphStateType): Promise<Partial<GraphStateType>> {
     const {scenes} = state;
-    const response = Promise.all(scenes.map(async (scene, index) => {
-      // const response = await presentationModel.invoke({scene});
-      console.log("presentation response generating for", index);
-      // return response.content as string;
+    const scenesWithDesc = await Promise.all(scenes.map(async (scene, index) => {
+      const response = await presentationModel.invoke({scene: scene.content});
+      return {
+        ...scene,
+        graphicDecsription: response.content as string,
+      };
     }));
   
     return {
-      // need to update the state so this can be added the appropriate scene
-      // for now, just returning the scenes
-      // scenes: scenes
+      scenes: scenesWithDesc,
     }
 }

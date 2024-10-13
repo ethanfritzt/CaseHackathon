@@ -1,5 +1,12 @@
 import { GraphStateType } from "src/server/state"
+import fs from 'fs';
 
+// function to save audio to disk
+function saveAudio(audio: Buffer, path: string): Promise<void> {
+  return new Promise((resolve, reject) =>
+    fs.writeFile
+  );
+};
 // define the generate audio function
 async function generateAudio(scene: string, index:number, language: string = 'en-US'): Promise<{audioPath: string, audioLength: number}> {
   // generate audio for the scene
@@ -19,6 +26,8 @@ async function generateAudio(scene: string, index:number, language: string = 'en
       sampleRateHertz: 16000 // Set the hertz rate
     },
   };
+  // save the audio to disk
+
   return {
     audioPath: "path/to/audio",
     audioLength: 30,
@@ -43,3 +52,5 @@ export async function audioGenerator(state: GraphStateType): Promise<Partial<Gra
     scenes: updatedScenes,
   };
 }
+
+await generateAudio("Hello, how are you?", 0);
