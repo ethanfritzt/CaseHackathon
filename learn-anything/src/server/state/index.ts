@@ -2,10 +2,13 @@ import { Annotation } from "@langchain/langgraph";
 import { Document } from "@langchain/core/documents";
 import { BaseMessage } from "@langchain/core/messages";
 
-interface SceneDetails {
-  context: string;
-  path: string;
-  length: number;
+// very bad way of doing this but it works for now
+export type SceneDetails = {
+  content: string;
+  path: string | undefined;
+  length: number | undefined;
+  graphicDecsription: string | undefined;
+  manimCode: string | undefined;
 }
 
 export const GraphState = Annotation.Root({
@@ -13,7 +16,7 @@ export const GraphState = Annotation.Root({
   isToxic: Annotation<boolean>,
   generatedContent: Annotation<string>,
   transcript: Annotation<string>,
-  scenes: Annotation<string[]>,
+  scenes: Annotation<SceneDetails[]>,
   });
 
 export type GraphStateType = typeof GraphState.State;

@@ -1,4 +1,4 @@
-import { GraphStateType } from "src/server/state/index";
+import { GraphStateType, SceneDetails } from "src/server/state/index";
 import { model } from "src/server/models/chatModel"
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
@@ -24,8 +24,14 @@ export async function createTranscript(state: GraphStateType): Promise<Partial<G
     }
 }
 
-function splitContent(content: string): string[] {
- // spliting function to split the content into scenes
-    const scenes = content.split("## SCENE");
-    return scenes;
+function splitContent(content: string): SceneDetails[] {
+  // Implement the logic to split the content and create SceneDetails objects
+  // This is a placeholder implementation
+  return content.split('\n\n').map((sceneContent, index) => ({
+    content: sceneContent,
+    path: undefined,
+    length: undefined,
+    graphicDecsription: undefined,
+    manimCode: undefined
+  }));
 }
