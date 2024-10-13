@@ -5,7 +5,8 @@ import { BaseMessage } from "@langchain/core/messages";
 // very bad way of doing this but it works for now
 export type SceneDetails = {
   content: string;
-  path: string | undefined;
+  audioPath: string | undefined;
+  imagePath: string | undefined;
   length: number | undefined;
   graphicDescription: string | undefined;
   manimCode: string | undefined;

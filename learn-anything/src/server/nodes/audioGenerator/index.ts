@@ -49,7 +49,7 @@ export async function audioGenerator(state: GraphStateType): Promise<Partial<Gra
       const { audioPath, audioLength } = await generateAudio({ sceneText: scene.content, index });
       return {
         ...scene,
-        path: audioPath,
+        audioPath: audioPath,
         length: audioLength
       };
     })

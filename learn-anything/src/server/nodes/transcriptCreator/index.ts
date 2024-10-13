@@ -7,7 +7,7 @@ const transcriptPromptTemplate = ChatPromptTemplate.fromMessages<{content: strin
     [
       "system",
       // create a prompt for the transcript creator, that creates scenes and formats as ## SCENE <scene number>
-        "You are a transcript creator. Split each scene by starting a new line with '## SCENE <scene number>' Create only 3 scenes",
+        "You are a transcript creator. Split each scene by starting a new line with '## SCENE <scene number>' Create only 3 scenes. Remmeber only 3 SCENES",
     ],
     ["user", "Content to split:{content}"],
   ]);
@@ -29,7 +29,8 @@ function splitContent(content: string): SceneDetails[] {
   // This is a placeholder implementation
   return content.split('\n\n').map((sceneContent, index) => ({
     content: sceneContent,
-    path: undefined,
+    audioPath: undefined,
+    imagePath: undefined,
     length: undefined,
     graphicDescription: undefined,
     manimCode: undefined

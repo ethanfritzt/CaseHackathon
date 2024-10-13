@@ -8,7 +8,7 @@ import { createContent } from "./nodes/contentCreator";
 import { createTranscript } from "./nodes/transcriptCreator";
 import { audioGenerator } from "./nodes/audioGenerator";
 import { createPresentation } from "./nodes/presentationGenerator";
-import { createManimVisual } from "./nodes/visualGenerator";
+import { imageGenerator } from "./nodes/visualGenerator";
 import { combineScenes } from "./nodes/combineScenes";
 
 
@@ -35,7 +35,7 @@ const workflow = new StateGraph(GraphState)
     .addNode("createTranscript", createTranscript)
     .addNode("audioGenerator", audioGenerator)
     .addNode("createPresentation", createPresentation)
-    .addNode("createManimVisual", createManimVisual)
+    .addNode("createImageVisual", imageGenerator)
     .addNode("combineScenes", combineScenes)
 
 workflow.addEdge(START, "toxicityCheck")
@@ -47,8 +47,8 @@ workflow.addEdge(START, "toxicityCheck")
     .addEdge("createContent", "createTranscript")
     .addEdge("createTranscript", "audioGenerator")
     .addEdge("audioGenerator", "createPresentation")
-    .addEdge("createPresentation", "createManimVisual")
-    .addEdge("createManimVisual", "combineScenes")
+    .addEdge("createPresentation", "createImageVisual")
+    .addEdge("createImageVisual", "combineScenes")
     .addEdge("combineScenes", END)
 
 
