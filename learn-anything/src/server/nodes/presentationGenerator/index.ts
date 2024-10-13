@@ -14,16 +14,26 @@ const presentationPromptTemplate = ChatPromptTemplate.fromMessages<{scene: strin
 const presentationModel = presentationPromptTemplate.pipe(model);
 
 export async function createPresentation(state: GraphStateType): Promise<Partial<GraphStateType>> {
+  console.log("running createPresentation")
     const {scenes} = state;
     const scenesWithDesc = await Promise.all(scenes.map(async (scene, index) => {
       const response = await presentationModel.invoke({scene: scene.content});
+      // console.log("response", response)
       return {
         ...scene,
-        graphicDecsription: response.content as string,
+        graphicDescription: response.content as string,
       };
     }));
-  
+    console.log("scenesWithDesc", scenesWithDesc)
     return {
-      scenes: scenesWithDesc,
+      scenes: scenesWithDesc.map(scene => ({
+        ...scene,
+        graphicDescription: scene.graphicDescription,
+      })),
     }
 }
+
+// async function test() {
+// await createPresentation({scenes: [{content: "this is a scene"}, {content: "this is another scene"}, {content: "this is a third scene"}]})
+// }
+// test()

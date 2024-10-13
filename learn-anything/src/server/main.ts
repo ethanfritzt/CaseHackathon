@@ -46,8 +46,7 @@ workflow.addEdge(START, "toxicityCheck")
     })
     .addEdge("createContent", "createTranscript")
     .addEdge("createTranscript", "audioGenerator")
-    .addEdge("createTranscript", "createPresentation")
-    .addEdge("audioGenerator", "createManimVisual")
+    .addEdge("audioGenerator", "createPresentation")
     .addEdge("createPresentation", "createManimVisual")
     .addEdge("createManimVisual", "combineScenes")
     .addEdge("combineScenes", END)
@@ -60,11 +59,7 @@ const app = workflow.compile()
 const representation = app.getGraph();
 
 const inputs = {
-  messages: [
-    new HumanMessage(
-      "I want to learn about the history of the United States",
-    ),
-  ],
+  userInput: "Teach me about the history of the United States",
 };
 
 let finalState;

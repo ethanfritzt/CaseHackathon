@@ -7,7 +7,7 @@ const transcriptPromptTemplate = ChatPromptTemplate.fromMessages<{content: strin
     [
       "system",
       // create a prompt for the transcript creator, that creates scenes and formats as ## SCENE <scene number>
-        "You are a transcript creator. Split each scene by starting a new line with '## SCENE <scene number>'",
+        "You are a transcript creator. Split each scene by starting a new line with '## SCENE <scene number>' Create only 3 scenes",
     ],
     ["user", "Content to split:{content}"],
   ]);
@@ -31,7 +31,7 @@ function splitContent(content: string): SceneDetails[] {
     content: sceneContent,
     path: undefined,
     length: undefined,
-    graphicDecsription: undefined,
+    graphicDescription: undefined,
     manimCode: undefined
   }));
 }

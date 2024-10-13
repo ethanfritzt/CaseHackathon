@@ -7,7 +7,7 @@ export type SceneDetails = {
   content: string;
   path: string | undefined;
   length: number | undefined;
-  graphicDecsription: string | undefined;
+  graphicDescription: string | undefined;
   manimCode: string | undefined;
 }
 
