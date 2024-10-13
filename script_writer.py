@@ -23,5 +23,18 @@ def write_script(level, prompt):
 level = input("What is your current education/professional level? ")
 prompt_message = input("What concept would you like explained? ")
 script = write_script(level,"Explain "+prompt_message) #THE VARIABLE CONTAINING THE SCRIPT
+requests = [] #contains every individual prompt to feed into Manim
 
-print(script) #print the string for testing purposes
+i = 0
+while (i < len(script)):
+    section = []
+    while (i < len(script) and script[i] != "\n"):
+        section.append(script[i])
+        i += 1
+    section = ''.join(section)
+    requests.append(section)
+    print(section)
+    i += 1
+
+
+#print(script) #print the string for testing purposes
