@@ -20,39 +20,71 @@ async function saveImage({ prompt, index }: { prompt: string, index: number }) {
   console.log(`Generating image for scene ${index}`);
 
   try {
-    // Generate image using the OpenAI API
+    // First attempt with DALL-E 3
     const response = await openai.images.generate({
-      model: "dall-e-3",    // Model for generating images
+      model: "dall-e-3",    // First try with DALL-E 3
       prompt: prompt,       // Prompt for the image
       n: 1,                 // Generate one image
-      size: "1024x1024",     // Image size
+      size: "1024x1024",    // Image size
     });
 
     // Get the URL of the generated image
     const imageUrl = response.data[0]?.url;
 
-    // Fetch the image data from the URL
     if (!imageUrl) {
       throw new Error(`Image URL is undefined for scene ${index}`);
     }
+
     const imageResponse = await fetch(imageUrl);
     const imageBuffer = await imageResponse.arrayBuffer();
 
-    // Define the path to save the image
     const imagePath = path.join(imageOutputDirectory, `scene_${index}.png`);
-
-    // Write the image buffer to a file in the directory
     await fs.promises.writeFile(imagePath, Buffer.from(imageBuffer));
 
     console.log(`Image content generated and saved for scene ${index} at ${imagePath}`);
     return {
       imagePath,
     };
+
   } catch (error) {
-    console.error(`Failed to generate image for scene ${index}: ${error}`);
-    throw error;
+    console.error(`Failed to generate image for scene ${index} with DALL-E 3: ${error}`);
+
+    // Retry with DALL-E 2 if the first attempt fails
+    try {
+      console.log(`Retrying with DALL-E 2 for scene ${index}`);
+
+      // Attempt with DALL-E 2
+      const response = await openai.images.generate({
+        model: "dall-e-2",    // Retry with DALL-E 2
+        prompt: prompt,       // Same prompt for the image
+        n: 1,                 // Generate one image
+        size: "1024x1024",    // Image size
+      });
+
+      const imageUrl = response.data[0]?.url;
+
+      if (!imageUrl) {
+        throw new Error(`Image URL is undefined for scene ${index} (DALL-E 2)`);
+      }
+
+      const imageResponse = await fetch(imageUrl);
+      const imageBuffer = await imageResponse.arrayBuffer();
+
+      const imagePath = path.join(imageOutputDirectory, `scene_${index}.png`);
+      await fs.promises.writeFile(imagePath, Buffer.from(imageBuffer));
+
+      console.log(`Image content generated and saved for scene ${index} at ${imagePath} (DALL-E 2)`);
+      return {
+        imagePath,
+      };
+
+    } catch (retryError) {
+      console.error(`Failed to generate image for scene ${index} with DALL-E 2 as well: ${retryError}`);
+      throw retryError;
+    }
   }
 }
+
 
 // This key has a limit of only 7 images per minute
 export async function imageGenerator(state: GraphStateType): Promise<Partial<GraphStateType>> {
