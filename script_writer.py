@@ -2,10 +2,11 @@ import os
 import openai
 from dotenv import load_dotenv, dotenv_values 
 
-load_dotenv() 
+load_dotenv()
 
 openai.api_key = os.getenv("api_key")
 
+#the method prompting ChatGPT
 def write_script(level, prompt):
     completion = openai.chat.completions.create(
         model="gpt-4",
