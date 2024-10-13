@@ -1,10 +1,7 @@
 import { request } from "http";
 import { GraphStateType } from "src/server/state"
-<<<<<<< HEAD
 import fs from 'fs';
-=======
 require('dotenv').config();
->>>>>>> 10cf975 (Added the code to send the requestBody to the API and ensured that that any errors during the API call are caught.)
 
 // function to save audio to disk
 function saveAudio(audio: Buffer, path: string): Promise<void> {
@@ -31,14 +28,6 @@ async function generateAudio(scene: string, index:number, language: string = 'en
       sampleRateHertz: 16000 // Set the hertz rate
     },
   };
-<<<<<<< HEAD
-  // save the audio to disk
-
-  return {
-    audioPath: "path/to/audio",
-    audioLength: 30,
-  };
-=======
 
   const apiKey = process.env.OPENAI_API_KEY;
   const apiUrl = "https://api.openai.com/v1/chat/completions"
@@ -79,7 +68,6 @@ async function generateAudio(scene: string, index:number, language: string = 'en
     }
     throw error; // Propagate the error
 }
->>>>>>> 10cf975 (Added the code to send the requestBody to the API and ensured that that any errors during the API call are caught.)
 }
 
 export async function audioGenerator(state: GraphStateType): Promise<Partial<GraphStateType>> {
@@ -101,4 +89,5 @@ export async function audioGenerator(state: GraphStateType): Promise<Partial<Gra
   };
 }
 
-// await generateAudio("Hello, how are you?", 0);
+// async function test { await generateAudio("Hello, how are you?", 0); }
+// test();
