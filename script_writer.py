@@ -28,7 +28,17 @@ def write_script():
     #prompt user for input
     level = input("What is your current education/professional level? ")
     prompt_message = input("What concept would you like explained? ")
-    script = generate(level,"Explain "+prompt_message) #THE VARIABLE CONTAINING THE SCRIPT
+
+    try:
+        # Call the generate() function to get the script
+        script = generate(level, "Explain " + prompt_message) #THE VARIABLE CONTAINING THE SCRIPT
+
+        if not script or not isinstance(script, str):
+            raise ValueError("Failed to generate a script. Please try again.")
+    
+    except Exception as e:
+        print(f"Error generating script: {e}")
+        return
 
     i = 0
     while (i < len(script)):
