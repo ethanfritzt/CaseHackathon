@@ -9,7 +9,6 @@ export type SceneDetails = {
   imagePath: string | undefined;
   length: number | undefined;
   graphicDescription: string | undefined;
-  manimCode: string | undefined;
 }
 
 export const GraphState = Annotation.Root({
@@ -18,6 +17,7 @@ export const GraphState = Annotation.Root({
   generatedContent: Annotation<string>,
   transcript: Annotation<string>,
   scenes: Annotation<SceneDetails[]>,
+  finalVideoPath: Annotation<string>,
   });
 
 export type GraphStateType = typeof GraphState.State;

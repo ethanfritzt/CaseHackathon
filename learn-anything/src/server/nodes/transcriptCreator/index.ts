@@ -33,6 +33,5 @@ function splitContent(content: string): SceneDetails[] {
     imagePath: undefined,
     length: undefined,
     graphicDescription: undefined,
-    manimCode: undefined
   }));
 }

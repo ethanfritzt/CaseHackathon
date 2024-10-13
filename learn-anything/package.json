@@ -8,16 +8,20 @@
     "start": "next start",
     "lint": "next lint",
     "run-agent": "ebx src/server/main.ts -r --ignore-types",
-    "test-agent": "ebx src/server/nodes/audioGenerator/index.ts -r --ignore-types"
+    "test-agent": "ebx src/server/nodes/combineScenes/index.ts -r --ignore-types"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@langchain/community": "^0.2.31",
     "@langchain/core": "^0.3.6",
     "@langchain/langgraph": "0.2.0",
     "@langchain/openai": "^0.3.4",
     "@langchain/pinecone": "^0.1.0",
     "@pinecone-database/pinecone": "^3.0.3",
+    "@types/fluent-ffmpeg": "^2.1.26",
     "dotenv": "^16.4.5",
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.3",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",

@@ -10,6 +10,7 @@
 # generated files
 /generated_audio
 /generated_images
+/generated_videos
 
 # testing
 /coverage
