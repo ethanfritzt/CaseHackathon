@@ -7,6 +7,9 @@
 .yarn/install-state.gz
 /dist
 
+# generated files
+/learn-anything/generated_audio
+
 # testing
 /coverage
 

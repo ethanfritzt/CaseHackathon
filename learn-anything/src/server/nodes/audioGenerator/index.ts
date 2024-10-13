@@ -1,93 +1,74 @@
-import { request } from "http";
-import { GraphStateType } from "src/server/state"
-import fs from 'fs';
-require('dotenv').config();
+import fs from "fs";
+import path from "path";
+import OpenAI from "openai";
+import dotenv from "dotenv";
+import { GraphStateType } from "@/server/state";
+dotenv.config();
 
-// function to save audio to disk
-function saveAudio(audio: Buffer, path: string): Promise<void> {
-  return new Promise((resolve, reject) =>
-    fs.writeFile
-  );
-};
-// define the generate audio function
-async function generateAudio(scene: string, index:number, language: string = 'en-US'): Promise<{audioPath: string, audioLength: number}> {
-  // generate audio for the scene
-  // return the audio path and length
+const openai = new OpenAI();
+const outputDirectory = path.resolve("./generated_audio");
+
+// Ensure the output directory exists
+if (!fs.existsSync(outputDirectory)) {
+  fs.mkdirSync(outputDirectory, { recursive: true });
+}
+
+async function generateAudio({sceneText, index}: {sceneText: string, index: number}) {
   console.log(`Generating audio for scene ${index}`);
-  const requestBody = {
-    input: {
-      text: scene, // The text to convert to speech
-    },
-    voice: {
-      languageCode: language, // Set the language code dynamically
-      name: `${language}-Wavenet-D`, // Select a voice based on the language
-    },
-    audioConfig: {
-      audioEncoding: "MP3", // Specify audio encoding format
-      speakingRate: 1.0, // Specify the speaking rate
-      sampleRateHertz: 16000 // Set the hertz rate
-    },
-  };
-
-  const apiKey = process.env.OPENAI_API_KEY;
-  const apiUrl = "https://api.openai.com/v1/chat/completions"
-  try{
-    const response = await fetch(`${apiUrl}?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(requestBody),
-      mode: 'cors',
+  
+  try {
+    const response = await openai.audio.speech.create({
+      model: "tts-1",
+      voice: `alloy`, // Adjusted according to OpenAI's voice system
+      input: sceneText, // Text input from scene
     });
 
-    if (!response.ok){
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
+    // Create the file path for storing the audio
+    const audioPath = path.join(outputDirectory, `scene_${index}.mp3`);
 
-    const data = await response.json();
-    const audioContent = data.audioContent;
+    // Convert the response to a buffer and write to the file
+    const buffer = Buffer.from(await response.arrayBuffer());
+    await fs.promises.writeFile(audioPath, buffer);
 
     console.log(`Audio content generated for scene ${index}`);
-
     return {
-      audioPath: "path/to/audio",
-      audioLength: 30,
+      audioPath,
+      audioLength: buffer.length / 1000 // Return length in seconds as a rough estimate
     };
-
+  } catch (error) {
+    console.error(`Failed to generate audio for scene ${index}: ${error}`);
+    throw error;
   }
-  catch (error: unknown) {
-    if (error instanceof Error) {
-        // If the error is an instance of the Error class, you can safely access its properties
-        console.error(`Failed to generate audio: ${error.message}`);
-    } else {
-        // Handle unexpected error types
-        console.error(`Failed to generate audio: ${String(error)}`);
-    }
-    throw error; // Propagate the error
-}
 }
 
 export async function audioGenerator(state: GraphStateType): Promise<Partial<GraphStateType>> {
-  const {scenes} = state;
-  // for each scene, generate audio in parallel
-  // should probably modify the scenes to update with the audio file path, and length of the audio
-  const updatedScenes = await Promise.all(scenes.map(async (scene, index) => {
-    // generate audio for the scene
-  const {audioPath, audioLength} = await generateAudio(scene.content, index);
-  return {
-    ...scene,
-    path: audioPath,
-    length: audioLength,
-  };
+  const { scenes } = state;
+  
+  const updatedScenes = await Promise.all(
+    scenes.map(async (scene, index) => {
+      const { audioPath, audioLength } = await generateAudio({ sceneText: scene.content, index });
+      return {
+        ...scene,
+        path: audioPath,
+        length: audioLength
+      };
+    })
+  );
 
-}));
   return {
-    scenes: updatedScenes,
+    scenes: updatedScenes
   };
 }
 
-// async function test { await generateAudio("Hello, how are you?", 0); }
+// async function test() {
+//   try {
+//     await audioGenerator({
+//       scenes: [{ content: "This is a scene audio text", path: undefined, length: undefined, graphicDescription: undefined, manimCode: undefined }]
+//     });
+//     console.log("Audio generation completed successfully.");
+//   } catch (error) {
+//     console.error("Audio generation failed:", error);
+//   }
+// }
+
 // test();
