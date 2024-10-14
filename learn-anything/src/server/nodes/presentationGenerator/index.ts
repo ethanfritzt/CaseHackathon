@@ -1,4 +1,4 @@
-import { GraphStateType } from "src/server/state/index";
+import { GraphStateType } from "@/server/state";
 import { model } from "src/server/models/chatModel";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
@@ -16,7 +16,7 @@ const presentationModel = presentationPromptTemplate.pipe(model);
 export async function createPresentation(state: GraphStateType): Promise<Partial<GraphStateType>> {
   console.log("running createPresentation")
     const {scenes} = state;
-    const scenesWithDesc = await Promise.all(scenes.map(async (scene, index) => {
+    const scenesWithDesc = await Promise.all(scenes.map(async (scene) => {
       const response = await presentationModel.invoke({scene: scene.content});
       // console.log("response", response)
       return {

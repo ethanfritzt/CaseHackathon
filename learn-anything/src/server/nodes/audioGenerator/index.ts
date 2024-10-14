@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { GraphStateType } from "@/server/state";
 dotenv.config();
