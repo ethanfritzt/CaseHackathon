@@ -1,5 +1,5 @@
 import { GraphStateType } from "@/server/state";
-import { model } from "src/server/models/chatModel";
+import { model } from "../../models/chatModel";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 // Define the chat prompt template for transcript creation

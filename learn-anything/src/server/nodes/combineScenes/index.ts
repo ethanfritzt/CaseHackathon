@@ -3,9 +3,11 @@ import path from "path";
 import fs from "fs";
 import { GraphStateType } from "src/server/state/index";
 import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
+import ffprobeInstaller from "@ffprobe-installer/ffprobe";
 
 // Set the ffmpeg binary path
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+ffmpeg.setFfprobePath(ffprobeInstaller.path);
 
 // Define output directory for combined videos
 const videoOutputDirectory = path.resolve("./generated_videos");
