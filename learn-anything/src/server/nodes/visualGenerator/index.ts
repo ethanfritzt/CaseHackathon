@@ -25,7 +25,7 @@ async function generateImage({ prompt, index }: { prompt: string, index: number 
       model: "dall-e-3",    // First try with DALL-E 3
       prompt: prompt,       // Prompt for the image
       n: 1,                 // Generate one image
-      size: "1024x1024",    // Image size
+      size: "1024x1024",    // Image size (half HD)
     });
 
     // Get the URL of the generated image
