@@ -1,6 +1,4 @@
 import { Annotation } from "@langchain/langgraph";
-import { Document } from "@langchain/core/documents";
-import { BaseMessage } from "@langchain/core/messages";
 
 // very bad way of doing this but it works for now
 export type SceneDetails = {

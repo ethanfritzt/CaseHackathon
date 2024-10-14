@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
-import {OpenAI} from "openai"; // Assuming OpenAI is your image generation source
+import { OpenAI } from "openai";
 import dotenv from "dotenv";
-import { DallEAPIWrapper } from "@langchain/openai";
-import { GraphStateType } from "src/server/state/index";
+import { GraphStateType } from "@/server/state";
 dotenv.config();
 
 const openai = new OpenAI();
@@ -16,7 +15,7 @@ if (!fs.existsSync(imageOutputDirectory)) {
   fs.mkdirSync(imageOutputDirectory, { recursive: true });
 }
 
-async function saveImage({ prompt, index }: { prompt: string, index: number }) {
+async function generateImage({ prompt, index }: { prompt: string, index: number }) {
   console.log(`Generating image for scene ${index}`);
 
   try {
@@ -25,7 +24,7 @@ async function saveImage({ prompt, index }: { prompt: string, index: number }) {
       model: "dall-e-3",    // First try with DALL-E 3
       prompt: prompt,       // Prompt for the image
       n: 1,                 // Generate one image
-      size: "1024x1024",    // Image size
+      size: "1024x1024",    // Image size (half HD)
     });
 
     // Get the URL of the generated image
@@ -99,7 +98,7 @@ export async function imageGenerator(state: GraphStateType): Promise<Partial<Gra
       throw new Error(`Scene ${index} does not have a graphic description`);
     }
     // generate image for the scene
-    const { imagePath } = await saveImage({ prompt: scene.graphicDescription, index });
+    const { imagePath } = await generateImage({ prompt: scene.graphicDescription, index });
 
     return {
       ...scene,
@@ -111,3 +110,6 @@ export async function imageGenerator(state: GraphStateType): Promise<Partial<Gra
     scenes: updatedScenes,
   };
 }
+
+// async function test(prompt: string) { await generateImage({ prompt, index: 0 }); }
+// test("a white siamese cat"); // Outputs ./generated_images/scene_0.png

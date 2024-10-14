@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import { GraphStateType } from "@/server/state";
 dotenv.config();
@@ -30,7 +30,7 @@ async function generateAudio({sceneText, index}: {sceneText: string, index: numb
     const buffer = Buffer.from(await response.arrayBuffer());
     await fs.promises.writeFile(audioPath, buffer);
 
-    console.log(`Audio content generated for scene ${index}`);
+    console.log(`Audio content generated for scene ${index} at ${audioPath}`);
     return {
       audioPath,
       audioLength: buffer.length / 1000 // Return length in seconds as a rough estimate
@@ -60,15 +60,5 @@ export async function audioGenerator(state: GraphStateType): Promise<Partial<Gra
   };
 }
 
-// async function test() {
-//   try {
-//     await audioGenerator({
-//       scenes: [{ content: "This is a scene audio text", path: undefined, length: undefined, graphicDescription: undefined, manimCode: undefined }]
-//     });
-//     console.log("Audio generation completed successfully.");
-//   } catch (error) {
-//     console.error("Audio generation failed:", error);
-//   }
-// }
-
-// test();
+// async function test(prompt: string) { await generateAudio({ sceneText: prompt, index: 0 }); }
+// test("This is a scene audio text"); // Outputs ./generated_audio/scene_0.mp3

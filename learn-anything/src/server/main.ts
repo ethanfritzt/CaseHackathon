@@ -26,8 +26,6 @@ import { StateGraph } from "@langchain/langgraph";
 // other
 import fs from "fs";
 
-import { HumanMessage } from "@langchain/core/messages";
-
 
 const workflow = new StateGraph(GraphState)
     .addNode("toxicityCheck", toxicityCheck)
@@ -62,7 +60,7 @@ const inputs = {
   userInput: "Teach me about the history of the United States",
 };
 
-let finalState;
+let _finalState; // DEBUG
 
 (async () => {
   const image = await representation.drawMermaidPng();
@@ -85,7 +83,7 @@ let finalState;
           tool_calls: lastMsg.tool_calls,
         }, { depth: null });
         console.log("---\n");
-        finalState = value;
+        _finalState = value; // DEBUG
       } else {
         console.warn(`Output from node '${key}' does not contain valid messages. \n\n Here is the output: \n\n ${JSON.stringify(output[key], null, 2)}`);
       }
@@ -93,6 +91,6 @@ let finalState;
   }
 })();
 
-// console.log(JSON.stringify(finalState, null, 2));
+// console.log(JSON.stringify(_finalState, null, 2)); // DEBUG
 
 

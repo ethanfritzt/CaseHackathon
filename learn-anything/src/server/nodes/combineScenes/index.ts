@@ -3,9 +3,11 @@ import path from "path";
 import fs from "fs";
 import { GraphStateType } from "src/server/state/index";
 import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
+import ffprobeInstaller from "@ffprobe-installer/ffprobe";
 
 // Set the ffmpeg binary path
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+ffmpeg.setFfprobePath(ffprobeInstaller.path);
 
 // Define output directory for combined videos
 const videoOutputDirectory = path.resolve("./generated_videos");
@@ -15,7 +17,7 @@ if (!fs.existsSync(videoOutputDirectory)) {
   fs.mkdirSync(videoOutputDirectory, { recursive: true });
 }
 
-async function combineScene(scene: { imagePath: string, audioPath: string, index: number }): Promise<string> {
+async function composeScene(scene: { imagePath: string, audioPath: string, index: number }): Promise<string> {
   const { imagePath, audioPath, index } = scene;
 
   // Define the output path for the scene video
@@ -36,6 +38,11 @@ async function combineScene(scene: { imagePath: string, audioPath: string, index
         .loop(audioDuration)  // Loop the image for the duration of the audio
         .input(audioPath)     // Input audio
         .outputOptions("-c:v libx264")  // Encode to h264 for video
+        .outputOptions("-preset veryfast") // Set encoding speed
+        .outputOptions("-movflags faststart")                // Optimize for streaming
+        .outputOptions("-movflags frag_keyframe+empty_moov") // Optimize for streaming
+        .outputOptions("-level:v 4.0")     // Set video level for compatibility with most devices
+        .outputOptions("-profile:v main")  // Set video profile for compatibility with most devices
         .outputOptions("-pix_fmt yuv420p") // Ensure compatibility for most video players
         .outputOptions("-c:a aac")  // Encode to AAC for audio
         .outputOptions(`-t ${audioDuration}`)  // Set the duration of the video to match the audio
@@ -62,7 +69,7 @@ export async function combineScenes(state: GraphStateType): Promise<Partial<Grap
     const { imagePath, audioPath } = scene;
     if (imagePath && audioPath) {
       try {
-        const videoPath = await combineScene({ imagePath, audioPath, index });
+        const videoPath = await composeScene({ imagePath, audioPath, index });
         videoPaths.push(videoPath);
       } catch (error) {
         console.error(`Failed to combine scene ${index}:`, error);
